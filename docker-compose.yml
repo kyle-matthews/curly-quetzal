@@ -1,0 +1,52 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: backend/wsgi.py
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      FLASK_SECRET_KEY: ${FLASK_SECRET_KEY:-dev-secret}
+      DATABASE_URL: postgresql://cq:password@db:5432/curly_quetzal
+      ENABLE_DB: ${ENABLE_DB:-false}
+      CORS_ORIGINS: http://localhost:5173
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      db:
+        condition: service_healthy
+    command: flask run --host=0.0.0.0 --port=5000 --debug
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run dev -- --host"
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: cq
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: curly_quetzal
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cq -d curly_quetzal"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

@@ -1,0 +1,6 @@
+Alembic migrations — added when ENABLE_DB=true.
+
+To initialise:
+  flask db init
+  flask db migrate -m "initial schema"
+  flask db upgrade
