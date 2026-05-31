@@ -9,6 +9,7 @@ export function useAdjust() {
   const startRewrite = useStore((s) => s.startRewrite);
   const appendRewriteChunk = useStore((s) => s.appendRewriteChunk);
   const finaliseRewrite = useStore((s) => s.finaliseRewrite);
+  const abortRewrite = useStore((s) => s.abortRewrite);
   const setAdjustmentTarget = useStore((s) => s.setAdjustmentTarget);
 
   const [error, setError] = useState<string | null>(null);
@@ -29,8 +30,7 @@ export function useAdjust() {
         },
         onError: (msg) => {
           setError(msg);
-          // Reset in-progress flag by calling finalise with empty state
-          finaliseRewrite("", null as unknown as AnalysisResult);
+          abortRewrite();
         },
       }
     );

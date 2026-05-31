@@ -2,7 +2,11 @@ import json
 
 from flask import Response, jsonify, request
 
+import logging
+
 from app.api import api_bp
+
+logger = logging.getLogger(__name__)
 from app.services import rewriter
 from app.services.claude_client import ClaudeServiceError
 from app.utils.validators import validate_adjust_request
@@ -31,6 +35,9 @@ def adjust():
             yield f"data: {json.dumps({'event': 'done', 'rewritten_text': rewritten, 'scores': scores})}\n\n"
         except ClaudeServiceError as exc:
             yield f"data: {json.dumps({'event': 'error', 'message': str(exc)})}\n\n"
+        except Exception as exc:
+            logger.error("Unexpected error in adjust stream: %s", exc)
+            yield f"data: {json.dumps({'event': 'error', 'message': 'Rewrite failed unexpectedly. Please try again.'})}\n\n"
 
     return Response(
         generate(),

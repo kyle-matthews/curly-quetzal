@@ -3,7 +3,11 @@ import { useStore } from "../../store/readrightStore";
 import { copyToClipboard } from "../../lib/copyToClipboard";
 
 export default function ExportBar() {
-  const { originalText, analysisResult, rewrittenText, rewrittenScores, questions } = useStore();
+  const originalText = useStore((s) => s.originalText);
+  const analysisResult = useStore((s) => s.analysisResult);
+  const rewrittenText = useStore((s) => s.rewrittenText);
+  const rewrittenScores = useStore((s) => s.rewrittenScores);
+  const questions = useStore((s) => s.questions);
   const [copied, setCopied] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);

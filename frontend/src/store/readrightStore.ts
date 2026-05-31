@@ -32,6 +32,7 @@ interface AppState {
   startRewrite: () => void;
   appendRewriteChunk: (chunk: string) => void;
   finaliseRewrite: (rewrittenText: string, scores: AnalysisResult) => void;
+  abortRewrite: () => void;
   setQuestions: (questions: Question[]) => void;
   toggleDomain: (domain: Domain) => void;
   reset: () => void;
@@ -64,6 +65,7 @@ export const useStore = create<AppState>()(
         set((state) => ({ rewrittenText: state.rewrittenText + chunk })),
       finaliseRewrite: (rewrittenText, scores) =>
         set({ rewrittenText, rewrittenScores: scores, rewriteInProgress: false }),
+      abortRewrite: () => set({ rewriteInProgress: false }),
       setQuestions: (questions) => set({ questions }),
       toggleDomain: (domain) =>
         set((state) => ({

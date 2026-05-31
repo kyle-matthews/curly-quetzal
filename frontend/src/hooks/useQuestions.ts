@@ -1,7 +1,20 @@
 import { useState } from "react";
 import { useStore } from "../store/readrightStore";
 import { post } from "../lib/apiClient";
-import type { DevelopingFluentResult, QuestionsResult } from "../types/api";
+import type { AnalysisResult, DevelopingFluentResult, EarlyReaderResult, QuestionsResult } from "../types/api";
+
+function extractYearGroupAndBand(scores: AnalysisResult | null): { yearGroup: string; bookBand: string } {
+  if (!scores) return { yearGroup: "Y4", bookBand: "Gold" };
+  if (scores.profile === "early") {
+    const early = scores as EarlyReaderResult;
+    return { yearGroup: "Y1", bookBand: early.book_band ?? "Gold" };
+  }
+  const df = scores as DevelopingFluentResult;
+  return {
+    yearGroup: df.year_group_estimate ?? "Y4",
+    bookBand: df.book_band_estimate ?? "Gold",
+  };
+}
 
 export function useQuestions() {
   const profile = useStore((s) => s.profile)!;
@@ -18,9 +31,7 @@ export function useQuestions() {
     setIsLoading(true);
     setError(null);
 
-    const scores = (rewrittenScores ?? analysisResult) as DevelopingFluentResult | null;
-    const yearGroup = scores?.year_group_estimate ?? "Y4";
-    const bookBand = scores?.book_band_estimate ?? "Gold";
+    const { yearGroup, bookBand } = extractYearGroupAndBand(rewrittenScores ?? analysisResult);
 
     try {
       const result = await post<QuestionsResult>("/questions", {
