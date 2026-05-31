@@ -37,4 +37,4 @@ ENV PYTHONPATH=/app
 EXPOSE 8080
 
 # 2 sync workers; 120s timeout covers the longest synchronous Claude calls
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "120", "backend.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "120", "--chdir", "/app/backend", "wsgi:application"]
