@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY backend/requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir setuptools && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ ./backend/
 
