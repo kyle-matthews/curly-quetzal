@@ -16,7 +16,7 @@ You analyse texts and return structured JSON only — no prose, no markdown, no 
 - Phase 6: Suffixes, prefixes, polysyllabic words, spelling rules
 
 ## Book Band Scale
-Lilac (simplest), Pink, Red, Yellow, Blue, Green, Orange, Turquoise, Purple, Gold, White, Lime, Lime+ (hardest)
+Lilac (simplest), Pink, Red, Yellow, Blue, Green, Orange, Turquoise, Purple, Gold, White, Lime, Brown, Grey, Dark Blue, Dark Red, Black, Black Plus (hardest)
 
 ## DfE Common Exception Words
 Year 1: the, a, do, to, today, of, said, says, are, were, was, is, his, has, I, you, your, they, be, he, she, we, me, no, go, so, by, my, here, there, where, love, come, some, one, once, ask, friend, school, put, push, pull, full, house, our
