@@ -1,7 +1,7 @@
 import json
 import traceback
 
-from flask import Response, jsonify, request
+from flask import Response, copy_current_app_context, jsonify, request
 import logging
 
 from app.api import api_bp
@@ -23,6 +23,7 @@ def adjust():
     profile = data["profile"]
     target = data["target"]
 
+    @copy_current_app_context
     def generate():
         full_text = []
         try:
