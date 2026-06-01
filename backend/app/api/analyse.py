@@ -35,6 +35,8 @@ def analyse():
                 "book_band_estimate": nc["book_band_estimate"],
                 "book_band_colour": nc["book_band_colour"],
                 "nc_rationale": nc.get("nc_rationale", ""),
+                "spelling_features": nc.get("spelling_features", []),
+                "exception_words_found": nc.get("exception_words_found", []),
                 "warnings": list({*scores.get("warnings", []), *nc.get("warnings", [])}),
                 "vocabulary": vocab,
             }
