@@ -15,6 +15,15 @@ from flask import current_app
 logger = logging.getLogger(__name__)
 
 
+def _strip_code_fences(text: str) -> str:
+    """Remove markdown code fences Claude sometimes wraps JSON in."""
+    if text.startswith("```"):
+        text = text.split("\n", 1)[-1]
+        if text.endswith("```"):
+            text = text[: text.rfind("```")]
+    return text.strip()
+
+
 class ClaudeServiceError(Exception):
     pass
 
@@ -67,10 +76,9 @@ class ClaudeClient:
         self._log_cache_usage(response)
 
         try:
-            return json.loads(raw)
+            return json.loads(_strip_code_fences(raw))
         except json.JSONDecodeError:
-            # Retry once with a repair prompt
-            logger.warning("JSON parse failed on first attempt, retrying with repair prompt")
+            logger.warning("JSON parse failed on first attempt, retrying with repair prompt. Raw: %.200s", raw)
             return self._repair_json(system, user, raw, max_tokens, cache_system)
 
     def _repair_json(
@@ -97,7 +105,8 @@ class ClaudeClient:
                 system=system_block,
                 messages=[{"role": "user", "content": repair_user}],
             )
-            return json.loads(response.content[0].text.strip())
+            repaired = response.content[0].text.strip()
+            return json.loads(_strip_code_fences(repaired))
         except (anthropic.APIError, json.JSONDecodeError) as exc:
             raise ClaudeServiceError("Analysis service returned an unreadable response. Please try again.") from exc
 
