@@ -41,6 +41,7 @@ export interface DevelopingFluentResult {
   year_group_estimate: string;
   book_band_estimate: string;
   book_band_colour: string;
+  nc_rationale?: string;
   vocabulary: VocabResult;
   raw_text_stats: RawTextStats;
   warnings: string[];

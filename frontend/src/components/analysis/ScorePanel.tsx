@@ -25,11 +25,21 @@ export default function ScorePanel({ analysis }: ScorePanelProps) {
           style={{ backgroundColor: analysis.book_band_colour }}
         />
         <div>
-          <span className="text-sm font-medium text-stone-700">{analysis.book_band_estimate} band</span>
+          <span className="text-sm font-medium text-stone-700 dark:text-stone-200">
+            {analysis.book_band_estimate} band
+          </span>
           <span className="mx-2 text-stone-300">·</span>
-          <span className="text-sm text-stone-500">{analysis.year_group_estimate} estimate</span>
+          <span className="text-sm text-stone-500 dark:text-stone-400">
+            {analysis.year_group_estimate} estimate
+          </span>
         </div>
       </div>
+
+      {analysis.nc_rationale && (
+        <p className="mt-2 text-xs text-stone-500 dark:text-stone-400 leading-relaxed">
+          {analysis.nc_rationale}
+        </p>
+      )}
 
       <div className="mt-3 text-xs text-stone-400">
         {analysis.raw_text_stats.word_count} words ·{" "}
