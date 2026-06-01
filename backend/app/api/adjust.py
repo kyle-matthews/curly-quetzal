@@ -1,7 +1,7 @@
 import json
+import traceback
 
 from flask import Response, jsonify, request
-
 import logging
 
 from app.api import api_bp
@@ -36,7 +36,7 @@ def adjust():
         except ClaudeServiceError as exc:
             yield f"data: {json.dumps({'event': 'error', 'message': str(exc)})}\n\n"
         except Exception as exc:
-            logger.error("Unexpected error in adjust stream: %s", exc)
+            logger.error("Unexpected error in adjust stream:\n%s", traceback.format_exc())
             yield f"data: {json.dumps({'event': 'error', 'message': 'Rewrite failed unexpectedly. Please try again.'})}\n\n"
 
     return Response(
