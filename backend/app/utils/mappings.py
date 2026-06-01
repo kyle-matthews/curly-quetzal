@@ -1,8 +1,12 @@
 """
-Mapping tables: Flesch-Kincaid grade → UK year group → book band.
+Mapping tables: Flesch-Kincaid grade → UK year group and book band.
 
 Book bands follow the Book Trust / BookBand colour scheme used in most UK primaries.
-FK grade thresholds are approximate and should be used alongside other metrics.
+FK grade thresholds are approximate; the formula was designed for US grade levels so
+thresholds are calibrated here against UK primary norms.
+
+Year group and book band are derived independently from FK grade — the book band uses
+a finer-grained direct mapping rather than going through year group.
 """
 
 # Book band ordered list (easiest → hardest)
@@ -53,19 +57,40 @@ BOOK_BAND_COLOURS = {
 # UK year groups in order
 YEAR_GROUPS = ["Reception", "Y1", "Y2", "Y3", "Y4", "Y5", "Y6"]
 
-# Approximate FK grade → year group
+# FK grade → year group.
+# Thresholds recalibrated for UK primary: the FK formula runs ~2 grades high
+# relative to UK year groups, so a typical Y2 Gold text sits at FK ~3.5–4.5.
 FK_TO_YEAR_GROUP = [
     (0.0, 0.5, "Reception"),
     (0.5, 1.5, "Y1"),
-    (1.5, 2.5, "Y2"),
-    (2.5, 3.5, "Y3"),
-    (3.5, 4.5, "Y4"),
-    (4.5, 5.5, "Y5"),
-    (5.5, 7.0, "Y6"),
+    (1.5, 4.5, "Y2"),
+    (4.5, 6.5, "Y3"),
+    (6.5, 7.5, "Y4"),
+    (7.5, 9.0, "Y5"),
+    (9.0, 999, "Y6"),
 ]
 
-# Year group → typical book band range (lower, upper) based on "Expected" column
-# from the UK Book Trust band chart.
+# Direct FK grade → book band (finer-grained than going through year group).
+# Anchored on BookLife / Book Trust data: Gold = Y2–Y3 ≈ FK 3.5–5.0.
+FK_TO_BAND = [
+    (0.0, 0.5,  "Pink"),
+    (0.5, 1.0,  "Yellow"),
+    (1.0, 1.5,  "Blue"),
+    (1.5, 2.0,  "Green"),
+    (2.0, 2.5,  "Orange"),
+    (2.5, 3.0,  "Turquoise"),
+    (3.0, 3.5,  "Purple"),
+    (3.5, 5.0,  "Gold"),       # Y2–Y3
+    (5.0, 6.0,  "White"),      # Y2–Y3
+    (6.0, 7.0,  "Lime"),       # Y2–Y4
+    (7.0, 8.0,  "Brown"),      # Y3–Y4
+    (8.0, 9.0,  "Grey"),       # Y4–Y5
+    (9.0, 10.0, "Dark Blue"),  # Y5
+    (10.0, 11.0,"Dark Red"),   # Y5–Y6
+    (11.0, 999, "Black"),      # Y6+
+]
+
+# Year group → expected book band range (lower, upper) — Book Trust band chart.
 YEAR_GROUP_TO_BAND = {
     "Reception": ("Lilac",     "Yellow"),    # Levels 0–3
     "Y1":        ("Blue",      "Orange"),    # Levels 4–6
@@ -82,20 +107,26 @@ def fk_grade_to_year_group(grade: float) -> str:
         if low <= grade < high:
             return yg
     if grade < 0:
-        return "Y1"
+        return "Reception"
     return "Y6"
 
 
+def fk_grade_to_book_band(grade: float) -> str:
+    """Direct FK → band mapping; does not route through year group."""
+    for low, high, band in FK_TO_BAND:
+        if low <= grade < high:
+            return band
+    if grade < 0:
+        return "Lilac"
+    return "Black"
+
+
 def year_group_to_book_band(year_group: str) -> str:
-    """Return the upper book band estimate for a year group."""
+    """Return the upper book band for a year group (used by the rewriter)."""
     bands = YEAR_GROUP_TO_BAND.get(year_group)
     if bands:
         return bands[1]
-    return "Lime+"
-
-
-def fk_grade_to_book_band(grade: float) -> str:
-    return year_group_to_book_band(fk_grade_to_year_group(grade))
+    return "Black Plus"
 
 
 def book_band_colour(band: str) -> str:

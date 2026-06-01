@@ -25,7 +25,8 @@ def test_short_text_warning(app):
 def test_fk_grade_to_year_group():
     assert fk_grade_to_year_group(1.0) == "Y1"
     assert fk_grade_to_year_group(2.0) == "Y2"
-    assert fk_grade_to_year_group(4.0) == "Y4"
+    assert fk_grade_to_year_group(4.0) == "Y2"  # Gold-level Y2 text; old US-centric scale gave Y4
+    assert fk_grade_to_year_group(7.0) == "Y4"
 
 
 def test_fk_grade_to_book_band():
