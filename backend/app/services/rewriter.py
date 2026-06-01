@@ -10,13 +10,16 @@ from app.services import readability
 from app.services.claude_client import claude
 
 
-def stream_rewrite(text: str, target_type: str, target_value: str) -> Generator[str, None, None]:
+def stream_rewrite(
+    text: str, target_type: str, target_value: str, model: str | None = None
+) -> Generator[str, None, None]:
     """Yield text chunks from Claude while rewriting."""
     desc = prompt.target_description(target_type, target_value)
     yield from claude.stream_text(
         system=prompt.SYSTEM,
         user=prompt.user_message(text, desc),
         max_tokens=2048,
+        _model=model,
     )
 
 

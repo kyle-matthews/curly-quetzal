@@ -116,15 +116,23 @@ class ClaudeClient:
         user: str,
         max_tokens: int = 2048,
         cache_system: bool = True,
+        _model: str | None = None,
     ) -> Generator[str, None, None]:
-        """Yield text chunks from a streaming Claude response."""
+        """Yield text chunks from a streaming Claude response.
+
+        Pass _model when calling from a streaming generator that runs outside
+        the Flask app context (e.g. Gunicorn SSE responses) — resolve
+        self.model before entering the generator and forward it here.
+        """
         system_block: list[dict] = [{"type": "text", "text": system}]
         if cache_system:
             system_block[0]["cache_control"] = {"type": "ephemeral"}
 
+        model = _model if _model is not None else self.model
+
         try:
             with self.client.messages.stream(
-                model=self.model,
+                model=model,
                 max_tokens=max_tokens,
                 system=system_block,
                 messages=[{"role": "user", "content": user}],

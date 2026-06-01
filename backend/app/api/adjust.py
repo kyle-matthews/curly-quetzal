@@ -1,7 +1,7 @@
 import json
 import traceback
 
-from flask import Response, copy_current_app_context, jsonify, request
+from flask import Response, jsonify, request
 import logging
 
 from app.api import api_bp
@@ -23,11 +23,16 @@ def adjust():
     profile = data["profile"]
     target = data["target"]
 
-    @copy_current_app_context
+    # Resolve app-context values now, while we're inside the request context.
+    # The generator runs outside the app context in Gunicorn sync workers.
+    from app.services.claude_client import claude
+    _ = claude.client  # initialise the Anthropic client while context is live
+    model = claude.model  # cache model name; self.model reads current_app each time
+
     def generate():
         full_text = []
         try:
-            for chunk in rewriter.stream_rewrite(text, target["type"], target["value"]):
+            for chunk in rewriter.stream_rewrite(text, target["type"], target["value"], model=model):
                 full_text.append(chunk)
                 yield f"data: {json.dumps({'chunk': chunk})}\n\n"
 
