@@ -42,7 +42,7 @@ export interface DevelopingFluentResult {
   book_band_estimate: string;
   book_band_colour: string;
   nc_rationale?: string;
-  spelling_features?: string[];
+  spelling_features?: Record<string, string[]>;
   exception_words_found?: string[];
   vocabulary: VocabResult;
   raw_text_stats: RawTextStats;

@@ -47,21 +47,28 @@ export default function ScorePanel({ analysis }: ScorePanelProps) {
         {analysis.raw_text_stats.avg_syllables_per_word} syllables/word
       </div>
 
-      {analysis.spelling_features && analysis.spelling_features.length > 0 && (
-        <div className="mt-4">
-          <p className="text-xs font-medium text-stone-500 dark:text-stone-400 mb-2">
+      {analysis.spelling_features && Object.keys(analysis.spelling_features).length > 0 && (
+        <div className="mt-4 space-y-2">
+          <p className="text-xs font-medium text-stone-500 dark:text-stone-400">
             NC spelling features present
           </p>
-          <div className="flex flex-wrap gap-1.5">
-            {analysis.spelling_features.map((f) => (
-              <span
-                key={f}
-                className="text-xs font-mono bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 rounded px-2 py-0.5"
-              >
-                {f}
+          {Object.entries(analysis.spelling_features).map(([feature, words]) => (
+            <div key={feature} className="flex items-baseline gap-2 flex-wrap">
+              <span className="text-xs font-mono font-semibold text-primary-700 dark:text-primary-400 shrink-0 w-14">
+                {feature}
               </span>
-            ))}
-          </div>
+              <div className="flex flex-wrap gap-1.5">
+                {words.map((w) => (
+                  <span
+                    key={w}
+                    className="text-xs bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 rounded px-2 py-0.5"
+                  >
+                    {w}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

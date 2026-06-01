@@ -126,9 +126,9 @@ twelfth, variety, vegetable, vehicle, yacht
    regardless of formula metrics.
 3. Use the NC year-group descriptions above as the primary benchmark.
 4. For spelling_features: identify prefixes and suffixes from the NC Spelling Appendix \
-   above that are actually present in words in the text. Focus on features appropriate \
-   to the classified year group and below. Return each as a string with a hyphen showing \
-   position: "un-" for prefix, "-tion" for suffix. Only include items genuinely present.
+   above that are present in the text. For each feature found, return the actual words \
+   from the text that contain it. Focus on features appropriate to the classified year \
+   group and below. Only include features genuinely present with real example words.
 5. For exception_words_found: list any words from the DfE Y1–Y6 statutory word lists \
    above that appear in the text (lowercase, exact matches only). Return empty list for \
    Beyond KS2.
@@ -142,7 +142,7 @@ twelfth, variety, vegetable, vehicle, yacht
   "book_band_estimate": string,
   "book_band_colour": string,
   "nc_rationale": string,
-  "spelling_features": [string],
+  "spelling_features": { "<feature>": ["<word>", ...] },
   "exception_words_found": [string],
   "warnings": [string]
 }
@@ -151,7 +151,10 @@ year_group_estimate: one of Reception, Y1, Y2, Y3, Y4, Y5, Y6, Beyond KS2
 book_band_estimate: exact name from the band scale above
 nc_rationale: 1–2 plain sentences explaining the classification (sentence case, \
 British English — written for a class teacher, not a developer)
-spelling_features: NC Spelling Appendix prefixes/suffixes present in the text
+spelling_features: object mapping each NC feature (e.g. "-tion", "un-") to a list \
+of actual words from the text that contain it, e.g. \
+{"-tion": ["information", "question"], "un-": ["unhappy", "unusual"]}. \
+Empty object {} if none found.
 exception_words_found: DfE Y1–Y6 statutory words found in the text"""
 
 
