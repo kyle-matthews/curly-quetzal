@@ -76,7 +76,7 @@ export const useStore = create<AppState>()(
       reset: () => set(initialState),
     }),
     {
-      name: "cq-session",
+      name: "cq-session-v2",
       // Only persist the data the teacher needs on refresh — not in-progress state
       partialize: (state) => ({
         profile: state.profile,

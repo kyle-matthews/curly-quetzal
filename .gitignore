@@ -36,9 +36,6 @@ frontend/dist/
 frontend/.vite/
 *.tsbuildinfo
 
-# Docker
-.dockerignore
-
 # IDE
 .vscode/
 .idea/
