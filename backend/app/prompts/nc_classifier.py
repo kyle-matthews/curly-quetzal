@@ -79,7 +79,7 @@ Prefixes: fore-, mid-, over-, out-, under-, non-, ex-, co-, semi-, pro-
 Suffixes: -able / -ible, -ibly / -ably, -ant / -ent, -ance / -ence / -ency, \
 -cious / -tious, -tial / -cial
 
-## DfE Common Exception Words
+## DfE Common Exception / Statutory Word Lists
 
 **Year 1:** the, a, do, to, today, of, said, says, are, were, was, is, his, has, I, you, \
 your, they, be, he, she, we, me, no, go, so, by, my, here, there, where, love, come, \
@@ -90,6 +90,33 @@ climb, most, only, both, old, cold, gold, hold, told, every, great, break, steak
 beautiful, after, fast, last, past, father, class, grass, pass, plant, path, bath, hour, \
 move, prove, improve, sure, sugar, eye, could, should, would, who, whole, any, many, \
 clothes, busy, people, water, again, half, money, parents, Christmas
+
+**Year 3/4:** accident, actually, address, answer, appear, arrive, believe, bicycle, \
+breath, breathe, build, busy, business, calendar, caught, centre, century, certain, \
+circle, complete, consider, continue, decide, describe, different, difficult, disappear, \
+early, earth, eight, eighth, enough, exercise, experience, experiment, extreme, famous, \
+favourite, February, forward, forwards, fruit, grammar, group, guard, guide, heard, \
+heart, height, history, imagine, increase, important, interest, island, knowledge, learn, \
+length, library, material, medicine, mention, minute, natural, naughty, notice, occasion, \
+occasionally, often, opposite, ordinary, particular, peculiar, perhaps, popular, position, \
+possible, potatoes, pressure, probably, promise, purpose, quarter, question, recent, \
+regular, reign, remember, sentence, separate, special, straight, strange, strength, \
+suppose, surprise, therefore, though, although, thought, through, various, weight, woman, \
+women
+
+**Year 5/6:** accommodate, accompany, aggressive, amateur, ancient, apparent, appreciate, \
+attached, available, average, awkward, bargain, bruise, category, cemetery, committee, \
+communicate, community, competition, conscience, conscious, controversy, convenience, \
+correspond, criticise, curiosity, definite, desperate, determine, develop, dictionary, \
+disastrous, embarrass, environment, equip, equipped, equipment, especially, exaggerate, \
+excellent, existence, explanation, familiar, foreign, forty, frequently, government, \
+guarantee, harass, hindrance, identity, immediate, immediately, individual, interfere, \
+interrupt, language, leisure, lightning, marvellous, mischievous, muscle, necessary, \
+neighbour, nuisance, occupy, occur, opportunity, parliament, persuade, physical, \
+prejudice, privilege, profession, programme, pronunciation, queue, recognise, recommend, \
+relevant, restaurant, rhyme, rhythm, sacrifice, secretary, shoulder, signature, sincere, \
+sincerely, soldier, stomach, sufficient, suggest, symbol, system, temperature, thorough, \
+twelfth, variety, vegetable, vehicle, yacht
 
 ## Decision rules
 1. Classify by reader demands — vocabulary, concepts, sentence structure, assumed \
@@ -102,8 +129,9 @@ clothes, busy, people, water, again, half, money, parents, Christmas
    above that are actually present in words in the text. Focus on features appropriate \
    to the classified year group and below. Return each as a string with a hyphen showing \
    position: "un-" for prefix, "-tion" for suffix. Only include items genuinely present.
-5. For exception_words_found: list any Y1 or Y2 DfE common exception words that appear \
-   in the text (lowercase). Only include exact matches. Return empty list for Beyond KS2.
+5. For exception_words_found: list any words from the DfE Y1–Y6 statutory word lists \
+   above that appear in the text (lowercase, exact matches only). Return empty list for \
+   Beyond KS2.
 6. Add a warning if: text is very short (< 100 words) and estimates are uncertain; \
    text is verse or poetry where sentence metrics are unreliable; text is a list or \
    table rather than continuous prose.
@@ -124,7 +152,7 @@ book_band_estimate: exact name from the band scale above
 nc_rationale: 1–2 plain sentences explaining the classification (sentence case, \
 British English — written for a class teacher, not a developer)
 spelling_features: NC Spelling Appendix prefixes/suffixes present in the text
-exception_words_found: Y1/Y2 DfE common exception words found in the text"""
+exception_words_found: DfE Y1–Y6 statutory words found in the text"""
 
 
 def user_message(text: str, metrics: dict) -> str:

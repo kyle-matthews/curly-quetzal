@@ -13,5 +13,5 @@ def classify(text: str, metrics: dict) -> dict:
     return claude.complete_json(
         system=prompt.SYSTEM,
         user=prompt.user_message(text, metrics),
-        max_tokens=512,
+        max_tokens=768,
     )
