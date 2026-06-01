@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY backend/requirements.txt ./
-RUN pip install --no-cache-dir setuptools && \
+# setuptools <81 required: pkg_resources (needed by textstat 0.7.3) was removed in setuptools 81
+RUN pip install --no-cache-dir "setuptools<81" && \
     pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ ./backend/
